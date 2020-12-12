@@ -2,13 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 
@@ -20,6 +24,8 @@ class User extends Authenticatable implements JWTSubject
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use CanResetPassword;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -62,13 +68,6 @@ class User extends Authenticatable implements JWTSubject
         'profile_photo_url',
     ];
 
-    /**
-     * @param $value
-     */
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = Hash::make($value);
-    }
 
     /**
      * @return HasOne

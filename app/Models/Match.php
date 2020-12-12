@@ -6,10 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Match extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'client_id',
+    ];
 
     /**
      * @return HasMany
@@ -21,11 +31,19 @@ class Match extends Model
     }
 
     /**
+     * @return mixed
+     */
+    public function getLastMessageAttribute()
+    {
+        return $this->messages()->get()->last();
+    }
+
+    /**
      * @return BelongsTo
      */
     public function host()
     {
-        return $this->belongsTo(User::class,'host_id');
+        return $this->belongsTo(User::class, 'host_id');
     }
 
     /**
@@ -33,6 +51,6 @@ class Match extends Model
      */
     public function client()
     {
-        return $this->belongsTo(User::class,'client_id');
+        return $this->belongsTo(User::class, 'client_id');
     }
 }

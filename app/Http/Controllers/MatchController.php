@@ -2,84 +2,90 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MatchResource;
+use App\Http\Resources\UserResource;
 use App\Models\Match;
+use App\Models\User;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 class MatchController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Create a new AuthController instance.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function index()
+    public function __construct()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        $this->middleware('auth:api');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Match  $match
-     * @return \Illuminate\Http\Response
+     * @return AnonymousResourceCollection
      */
-    public function show(Match $match)
+    public function getUsers()
     {
-        //
+        return UserResource::collection(User::all()->except(auth('api')->user()->id));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Display the specified resource.
      *
-     * @param  \App\Models\Match  $match
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return MatchResource
      */
-    public function edit(Match $match)
+    public function createMatch(Request $request)
     {
-        //
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        /** @var User $authUser */
+        $authUser = auth('api')->user();
+        /** @var Match $match */
+        $match = $authUser->hostMatches()->create(['client_id' => $request->user_id]);
+        return MatchResource::make($match);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Match  $match
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse|Response
      */
-    public function update(Request $request, Match $match)
+    public function deleteMatch(Request $request)
     {
-        //
+        $request->validate([
+            'match_id' => 'required|exists:matches,id',
+        ]);
+
+        /** @var Match $match */
+        $match = Match::find($request->match_id);
+
+        /** @var User $user */
+        $user = auth('api')->user();
+        if ($match->host->id != $user->id && $match->client->id != $user->id) {
+            return response()->json(['error' => 'Not your chat'], 500);
+        }
+        $match->delete();
+        return response()->noContent();
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Display the specified resource.
      *
-     * @param  \App\Models\Match  $match
-     * @return \Illuminate\Http\Response
+     * @return AnonymousResourceCollection
      */
-    public function destroy(Match $match)
+    public function getMatches()
     {
-        //
+        /** @var User $user */
+        $user = auth('api')->user();
+        return MatchResource::collection($user->matches());
     }
 }

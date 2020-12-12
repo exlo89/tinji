@@ -2,84 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Message;
-use Illuminate\Http\Request;
+use App\Http\Resources\MessageResource;
+use App\Models\Match;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class MessageController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Create a new AuthController instance.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function index()
+    public function __construct()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        $this->middleware('auth:api');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Message  $message
-     * @return \Illuminate\Http\Response
+     * @param Match $match
+     * @return JsonResponse|AnonymousResourceCollection
      */
-    public function show(Message $message)
+    public function getMessages(Match $match)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Message  $message
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Message $message)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Message  $message
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Message $message)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Message  $message
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Message $message)
-    {
-        //
+        /** @var User $user */
+        $user = auth('api')->user();
+        if ($match->host->id != $user->id && $match->client->id != $user->id) {
+            return response()->json(['error' => 'Not your chat'],500);
+        }
+        return MessageResource::collection($match->messages);
     }
 }

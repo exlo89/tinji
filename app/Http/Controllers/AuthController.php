@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -29,31 +29,12 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'email' => 'required|email',
             'password' => 'required|string|min:6',
         ]);
-        $request->validate([
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:6',
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        if (! $token = auth()->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        return $this->createNewToken($token);
-        dump($request->all());
-        $request->validate([
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:6',
-        ]);
-
-        if (!$token = Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        if (!$token = auth('api')->attempt(['email' => $request->email, 'password' => $request->password])) {
             return response()->json(['message' => 'Wrong user or password.'], 401);
         }
 
@@ -65,6 +46,7 @@ class AuthController extends Controller
      *
      * @param Request $request
      * @return JsonResponse
+     * @throws ValidationException
      */
     public function register(Request $request)
     {
@@ -74,14 +56,29 @@ class AuthController extends Controller
             'password' => 'required|string|confirmed|min:6',
         ]);
 
+        /** @var User $user */
         $user = User::create($request->all());
-
-        return response()->json([
-            'message' => 'User successfully registered',
-            'user' => $user
-        ], 201);
+        $user->setting()->create();
+        $token = auth('api')->login($user);
+        return $this->createNewToken($token);
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function forgotPassword(Request $request)
+    {
+        $credentials = $request->validate(['email' => 'required|email']);
+
+        Password::sendResetLink($credentials);
+
+        Password::sendResetLink(
+            $request->only('email')
+        );
+
+        return response()->json(["message" => 'Reset password link sent on your email id.']);
+    }
 
     /**
      * Log the user out (Invalidate the token).
@@ -90,7 +87,7 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        auth()->logout();
+        auth('api')->logout();
 
         return response()->json(['message' => 'User successfully signed out']);
     }
@@ -102,7 +99,7 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->createNewToken(auth()->refresh());
+        return $this->createNewToken(auth('api')->refresh());
     }
 
     /**
@@ -112,7 +109,7 @@ class AuthController extends Controller
      */
     public function userProfile()
     {
-        return response()->json(auth()->user());
+        return response()->json(auth('api')->user());
     }
 
     /**
@@ -127,8 +124,8 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
-            'user' => auth()->user()
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
+            'user' => auth('api')->user()
         ]);
     }
 

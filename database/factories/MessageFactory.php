@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Match;
 use App\Models\Message;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MessageFactory extends Factory
@@ -28,7 +29,8 @@ class MessageFactory extends Factory
             'match_id' => $match,
             'from_id' => $this->faker->boolean ? $match->host_id : $match->client_id,
             'message' => $this->faker->text,
-            'seen' => $this->faker->boolean
+            'seen' => $this->faker->boolean,
+            'created_at' => $this->faker->dateTimeBetween(Carbon::now()->subMonth(), Carbon::now()->addMonth())
         ];
     }
 }
