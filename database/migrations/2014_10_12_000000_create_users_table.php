@@ -21,8 +21,13 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->integer('age')->default(18);
             $table->string('sex')->nullable();
+            $table->string('emoji_1')->nullable();
+            $table->string('emoji_2')->nullable();
+            $table->string('emoji_3')->nullable();
+            $table->string('emoji_4')->nullable();
             $table->rememberToken();
             $table->text('profile_photo_path')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

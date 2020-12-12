@@ -15,8 +15,8 @@ class CreateMatchesTable extends Migration
     {
         Schema::create('matches', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('friends_id')->constrained('users');
+            $table->foreignId('host_id')->constrained('users');
+            $table->foreignId('client_id')->constrained('users');
             $table->softDeletes();
             $table->timestamps();
         });

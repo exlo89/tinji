@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Match;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MatchFactory extends Factory
@@ -22,7 +23,8 @@ class MatchFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'host_id' => User::all()->random(),
+            'client_id' => User::all()->random()
         ];
     }
 }

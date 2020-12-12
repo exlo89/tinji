@@ -3,7 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use Faker\Provider\Miscellaneous;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class UserFactory extends Factory
@@ -28,6 +30,12 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
+            'age' => $this->faker->numberBetween(18, 30),
+            'sex' => Arr::random(['male', 'female', 'other']),
+            'emoji_1' => Miscellaneous::emoji(),
+            'emoji_2' => Miscellaneous::emoji(),
+            'emoji_3' => Miscellaneous::emoji(),
+            'emoji_4' => Miscellaneous::emoji(),
         ];
     }
 }
