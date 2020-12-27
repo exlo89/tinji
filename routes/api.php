@@ -26,6 +26,10 @@ Route::prefix('auth')->group(function () {
     Route::post('refresh', [AuthController::class, 'refresh']);
 });
 
+Route::get('test', function () {
+    return response()->json(['test' => 'joo dat funkt']);
+});
+
 Route::middleware('auth:api')->group(function () {
     Route::get('profile', [UserController::class, 'getProfile'])->name('profile.show');
     Route::get('setting', [UserController::class, 'getSetting'])->name('setting.show');
