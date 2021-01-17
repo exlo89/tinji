@@ -86,7 +86,8 @@ class User extends Authenticatable implements JWTSubject
      */
     public function matches()
     {
-        return $this->hostMatches()->get()->merge($this->clientMatches()->get());
+        return $this->hostMatches()->where('client_accept',true)
+            ->get()->merge($this->clientMatches()->where('client_accept',true)->get());
     }
 
     /**
@@ -94,11 +95,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function hostMatches()
     {
-        dump(Match::class);
-        dump('Test::class');
-        dump('Test::class');
-        dump('Test::class');
-        return $this->hasMany(Match::class, 'host_id');
+        return $this->hasMany(TinjiMatch::class, 'host_id');
     }
 
     /**
@@ -106,7 +103,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function clientMatches()
     {
-        return $this->hasMany(Match::class, 'client_id');
+        return $this->hasMany(TinjiMatch::class, 'client_id');
     }
 
     /**

@@ -17,6 +17,7 @@ class CreateMatchesTable extends Migration
             $table->id();
             $table->foreignId('host_id')->constrained('users');
             $table->foreignId('client_id')->constrained('users');
+            $table->boolean('client_accept')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

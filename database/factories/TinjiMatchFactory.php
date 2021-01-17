@@ -2,18 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\Match;
+use App\Models\TinjiMatch;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class MatchFactory extends Factory
+class TinjiMatchFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Match::class;
+    protected $model = TinjiMatch::class;
 
     /**
      * Define the model's default state.
@@ -24,7 +24,8 @@ class MatchFactory extends Factory
     {
         return [
             'host_id' => User::all()->random(),
-            'client_id' => User::all()->random()
+            'client_id' => User::all()->random(),
+            'client_accept' => $this->faker->boolean
         ];
     }
 }

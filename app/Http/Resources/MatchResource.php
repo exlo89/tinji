@@ -2,13 +2,13 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Match;
+use App\Models\TinjiMatch;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class UserResource
  * @package App\Http\Resources\v3\App
- * @mixin Match
+ * @mixin TinjiMatch
  */
 class MatchResource extends JsonResource
 {

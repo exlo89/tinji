@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\MessageResource;
-use App\Models\Match;
+use App\Models\TinjiMatch;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -23,10 +23,10 @@ class MessageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Match $match
+     * @param TinjiMatch $match
      * @return JsonResponse|AnonymousResourceCollection
      */
-    public function getMessages(Match $match)
+    public function getMessages(TinjiMatch $match)
     {
         /** @var User $user */
         $user = auth('api')->user();

@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Match;
+use App\Models\TinjiMatch;
 use App\Models\Message;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -23,8 +23,8 @@ class MessageFactory extends Factory
      */
     public function definition()
     {
-        /** @var Match $match */
-        $match = Match::all()->random();
+        /** @var TinjiMatch $match */
+        $match = TinjiMatch::all()->random();
         return [
             'match_id' => $match,
             'from_id' => $this->faker->boolean ? $match->host_id : $match->client_id,

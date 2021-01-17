@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\MatchResource;
 use App\Http\Resources\UserResource;
-use App\Models\Match;
+use App\Models\TinjiMatch;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -48,7 +48,8 @@ class MatchController extends Controller
 
         /** @var User $authUser */
         $authUser = auth('api')->user();
-        /** @var Match $match */
+
+        /** @var TinjiMatch $match */
         $match = $authUser->hostMatches()->create(['client_id' => $request->user_id]);
         return MatchResource::make($match);
     }
@@ -58,6 +59,7 @@ class MatchController extends Controller
      *
      * @param Request $request
      * @return JsonResponse|Response
+     * @throws Exception
      */
     public function deleteMatch(Request $request)
     {
@@ -65,8 +67,8 @@ class MatchController extends Controller
             'match_id' => 'required|exists:matches,id',
         ]);
 
-        /** @var Match $match */
-        $match = Match::find($request->match_id);
+        /** @var TinjiMatch $match */
+        $match = TinjiMatch::find($request->match_id);
 
         /** @var User $user */
         $user = auth('api')->user();
