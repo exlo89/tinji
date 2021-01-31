@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,6 +16,11 @@ use Laravel\Jetstream\HasProfilePhoto;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+/**
+ * Class User
+ * @package App\Models
+ * @mixin Eloquent
+ */
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory;
@@ -32,6 +39,7 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'google_id'
     ];
 
     /**

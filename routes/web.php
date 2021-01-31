@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,6 +24,10 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+// google login
+Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback'])->name('google.callback');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');

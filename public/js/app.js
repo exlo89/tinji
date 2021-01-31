@@ -4800,6 +4800,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -32002,6 +32007,25 @@ var render = function() {
                 },
                 [_vm._v("\n                Login\n            ")]
               )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "flex items-center justify-end mt-4" },
+            [
+              _vm.canResetPassword
+                ? _c(
+                    "inertia-link",
+                    {
+                      staticClass:
+                        "underline text-sm text-gray-600 hover:text-gray-900",
+                      attrs: { href: _vm.route("google.login") }
+                    },
+                    [_vm._v("\n                Google Login\n            ")]
+                  )
+                : _vm._e()
             ],
             1
           )
