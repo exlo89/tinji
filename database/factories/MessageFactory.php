@@ -27,7 +27,7 @@ class MessageFactory extends Factory
         $match = TinjiMatch::all()->random();
         return [
             'match_id' => $match,
-            'from_id' => $this->faker->boolean ? $match->host_id : $match->client_id,
+            'user_id' => $this->faker->boolean ? $match->host_id : $match->client_id,
             'message' => $this->faker->text,
             'seen' => $this->faker->boolean,
             'created_at' => $this->faker->dateTimeBetween(Carbon::now()->subMonth(), Carbon::now()->addMonth())

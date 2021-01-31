@@ -5,6 +5,7 @@ namespace App\Actions\Fortify;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException as ValidationExceptionAlias;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
 class CreateNewUser implements CreatesNewUsers
@@ -16,7 +17,7 @@ class CreateNewUser implements CreatesNewUsers
      *
      * @param array $input
      * @return \App\Models\User
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationExceptionAlias
      */
     public function create(array $input)
     {

@@ -31,11 +31,12 @@ Route::get('test', function () {
 });
 
 Route::middleware('auth:api')->group(function () {
-    Route::get('profile', [UserController::class, 'getProfile'])->name('profile.show');
-    Route::get('setting', [UserController::class, 'getSetting'])->name('setting.show');
-    Route::get('match', [MatchController::class, 'getMatches'])->name('match.show');
-    Route::post('match', [MatchController::class, 'createMatch'])->name('match.create');
-    Route::delete('match', [MatchController::class, 'deleteMatch'])->name('match.delete');
-    Route::get('users', [MatchController::class, 'getUsers'])->name('users.show');
-    Route::get('match/{match}/message', [MessageController::class, 'getMessages'])->name('matches.messages');
+    Route::get('profile', [UserController::class, 'getProfile']);
+    Route::get('setting', [UserController::class, 'getSetting']);
+    Route::get('match', [MatchController::class, 'getMatches']);
+    Route::post('match', [MatchController::class, 'createMatch']);
+    Route::delete('match', [MatchController::class, 'deleteMatch']);
+    Route::get('users', [MatchController::class, 'getUsers']);
+    Route::get('match/{match}/message', [MessageController::class, 'fetchMessages']);
+    Route::post('match/{match}/message', [MessageController::class, 'sendMessage']);
 });

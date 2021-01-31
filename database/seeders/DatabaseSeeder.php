@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->hasSetting()->create(['email' => 'admin@test.de']);
         User::factory(99)->hasSetting()->create();
         TinjiMatch::factory(100)->hasMessages(10, function (array $attributes, TinjiMatch $match) {
-            return ['from_id' => (bool)random_int(0, 1) ? $match->host : $match->client];
+            return ['user_id' => (bool)random_int(0, 1) ? $match->host : $match->client];
         })->create();
     }
 }

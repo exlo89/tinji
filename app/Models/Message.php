@@ -12,6 +12,13 @@ class Message extends Model
     use HasFactory, SoftDeletes;
 
     /**
+     * Fields that are mass assignable
+     *
+     * @var array
+     */
+    protected $fillable = ['user_id', 'message'];
+
+    /**
      * @return BelongsTo
      */
     public function match()
@@ -22,8 +29,8 @@ class Message extends Model
     /**
      * @return BelongsTo
      */
-    public function from()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'from_id');
+        return $this->belongsTo(User::class);
     }
 }

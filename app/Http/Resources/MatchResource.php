@@ -22,6 +22,7 @@ class MatchResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'client_accept' => $this->client_accept,
             'host' => UserResource::make($this->host),
             'client' => UserResource::make($this->client),
             'last_message' => $this->last_message,

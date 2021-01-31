@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('emoji_3')->nullable();
             $table->string('emoji_4')->nullable();
             $table->rememberToken();
+            $table->foreignId('current_team_id')->nullable();
             $table->text('profile_photo_path')->nullable();
             $table->softDeletes();
             $table->timestamps();
